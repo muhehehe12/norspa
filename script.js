@@ -1,253 +1,117 @@
-:root{
-  --bg:#0f1113;
-  --card: rgba(255,255,255,0.06);
-  --glass: rgba(255,255,255,0.06);
-  --accent: linear-gradient(135deg,#6dd3ff 0%,#8b6dff 100%);
-  --muted: rgba(255,255,255,0.65);
-  --glass-border: rgba(255,255,255,0.08);
-  --radius: 14px;
-  --gap: 18px;
-  --max-width: 1100px;
-  --shadow: 0 8px 30px rgba(2,6,23,0.6);
-  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color-scheme: dark;
-}
+// Basic interactive behaviors: gallery slider, scroll reveal, parallax, and dynamic placeholders.
+// Replace placeholder data below with actual details from the Google Maps listing.
 
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  background: linear-gradient(180deg,#0b0c0d 0%, #0f1113 100%);
-  color:#fff;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  line-height:1.45;
-  overflow-x:hidden;
-}
+document.addEventListener('DOMContentLoaded', function () {
+  // Placeholder data (replace with real values)
+  const data = {
+    name: '[PLACE NAME]',
+    description: '[Short description — replace with actual description]',
+    address: '[Address not available]',
+    phone: '+0000000000',
+    hours: '[Opening hours not available]',
+    mapsUrl: 'https://maps.app.goo.gl/ocfqPsAp1ABtetB26'
+  };
 
-/* Container */
-.container{
-  width:calc(100% - 32px);
-  max-width:var(--max-width);
-  margin:0 auto;
-  padding:28px 16px;
-}
+  // Populate fields
+  document.querySelector('.place-title').textContent = data.name;
+  document.querySelector('.place-sub').textContent = data.description;
+  document.getElementById('address').textContent = data.address;
+  document.getElementById('hours').textContent = data.hours;
+  document.getElementById('phone').textContent = data.phone;
+  document.getElementById('phone').href = 'tel:' + data.phone;
+  document.getElementById('contact-phone').textContent = data.phone;
+  document.getElementById('contact-phone').href = 'tel:' + data.phone;
+  document.getElementById('contact-address').textContent = data.address;
+  document.getElementById('cta-map').href = data.mapsUrl;
+  document.querySelectorAll('a[href="https://maps.app.goo.gl/ocfqPsAp1ABtetB26"]').forEach(a => a.href = data.mapsUrl);
 
-/* Hero */
-.hero{
-  position:relative;
-  min-height:72vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:28px 0;
-  overflow:hidden;
-}
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-.hero-inner{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:24px;
-  align-items:center;
-  width:100%;
-}
+  // Gallery slider logic
+  const gallery = document.getElementById('gallery');
+  const slides = Array.from(gallery.querySelectorAll('.slide'));
+  const prevBtn = document.querySelector('.gallery-nav.prev');
+  const nextBtn = document.querySelector('.gallery-nav.next');
+  const dotsWrap = document.getElementById('dots');
 
-/* Hero media */
-.hero-media{
-  position:absolute;
-  inset:0;
-  z-index:0;
-  overflow:hidden;
-  pointer-events:none;
-}
-.hero-img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  transform:scale(1.06);
-  filter:contrast(1.02) saturate(1.05) brightness(0.9);
-  transition:transform .9s cubic-bezier(.2,.9,.2,1);
-}
-.hero:hover .hero-img{transform:scale(1.08)}
-.hero-overlay{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(180deg, rgba(6,8,10,0.25), rgba(6,8,10,0.6));
-  mix-blend-mode:multiply;
-}
+  let index = 0;
+  const total = slides.length;
 
-/* Glass card */
-.hero-card{
-  position:relative;
-  z-index:2;
-  max-width:920px;
-  margin:0 auto;
-  padding:28px;
-  border-radius:18px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-  border:1px solid var(--glass-border);
-  box-shadow:var(--shadow);
-  backdrop-filter: blur(12px) saturate(120%);
-}
+  // Create dots
+  slides.forEach((s, i) => {
+    const btn = document.createElement('button');
+    if (i === 0) btn.classList.add('active');
+    btn.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(btn);
+  });
 
-/* Typography */
-.place-title{
-  margin:0 0 6px 0;
-  font-weight:700;
-  font-size:clamp(20px,4.6vw,34px);
-  letter-spacing:-0.02em;
-}
-.place-sub{
-  margin:0 0 18px 0;
-  color:var(--muted);
-  font-weight:400;
-}
+  function update() {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+      s.style.opacity = i === index ? '1' : '0.45';
+      s.style.transform = i === index ? 'translateY(0)' : 'translateY(6px)';
+    });
+    // scroll slider so active slide is visible
+    slides[index].scrollIntoView({behavior:'smooth', inline:'center'});
+    // update dots
+    Array.from(dotsWrap.children).forEach((d, i) => d.classList.toggle('active', i === index));
+  }
 
-/* Quick info */
-.quick-info{
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
-  margin-bottom:18px;
-}
-.info-item{min-width:140px}
-.info-item strong{display:block;font-weight:600}
-.info-item span, .info-item a{color:var(--muted);text-decoration:none}
+  function goTo(i) {
+    index = (i + total) % total;
+    update();
+  }
 
-/* Buttons */
-.btn{
-  display:inline-block;
-  padding:10px 16px;
-  border-radius:12px;
-  text-decoration:none;
-  font-weight:600;
-  font-size:14px;
-  transition:transform .18s ease, box-shadow .18s ease;
-  border:1px solid transparent;
-}
-.btn:hover{transform:translateY(-3px)}
-.btn.primary{
-  background:var(--accent);
-  color:#061018;
-  box-shadow:0 8px 30px rgba(139,109,255,0.12);
-}
-.btn.ghost{
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.06);
-  color:var(--muted);
-}
+  prevBtn.addEventListener('click', () => goTo(index - 1));
+  nextBtn.addEventListener('click', () => goTo(index + 1));
 
-/* Split section */
-.split{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:20px;
-  align-items:center;
-  margin-top:28px;
-}
-.split-media{
-  width:100%;
-  height:220px;
-  overflow:hidden;
-  border-radius:14px;
-  box-shadow:var(--shadow);
-}
-.split-media img{width:100%;height:100%;object-fit:cover;transform:scale(1.03);transition:transform .9s}
-.split-media:hover img{transform:scale(1.06)}
-.split-text{
-  padding:20px;
-  border-radius:14px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  border:1px solid var(--glass-border);
-}
+  // Auto-advance
+  let auto = setInterval(() => goTo(index + 1), 6000);
+  [prevBtn, nextBtn, gallery].forEach(el => {
+    el.addEventListener('mouseenter', () => clearInterval(auto));
+    el.addEventListener('mouseleave', () => auto = setInterval(() => goTo(index + 1), 6000));
+  });
 
-/* Features */
-.features{margin:12px 0 18px 0;padding:0;list-style:none;color:var(--muted)}
-.features li{margin:8px 0}
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.fade-in, .split-text, .gallery, .contact-card, .map-preview');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('show');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {threshold: 0.12});
 
-/* Gallery */
-.gallery h3{margin:0 0 12px 0}
-.gallery-wrap{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  position:relative;
-}
-.gallery-slider{
-  display:flex;
-  gap:12px;
-  overflow:hidden;
-  width:100%;
-  scroll-behavior:smooth;
-}
-.slide{
-  min-width:72%;
-  max-width:72%;
-  border-radius:14px;
-  overflow:hidden;
-  position:relative;
-  flex-shrink:0;
-  background:#0b0c0d;
-  transition:transform .5s cubic-bezier(.2,.9,.2,1), opacity .5s;
-  box-shadow:var(--shadow);
-}
-.slide img{width:100%;height:420px;object-fit:cover;display:block}
-.slide figcaption{
-  position:absolute;
-  left:16px;
-  bottom:16px;
-  color:#fff;
-  font-weight:600;
-  text-shadow:0 6px 18px rgba(0,0,0,0.6);
-}
-.gallery-nav{
-  background:rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.06);
-  color:#fff;
-  width:44px;height:44px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-}
-.gallery-dots{display:flex;gap:8px;margin-top:12px;justify-content:center}
-.gallery-dots button{
-  width:10px;height:10px;border-radius:50%;border:none;background:rgba(255,255,255,0.06);cursor:pointer;
-}
-.gallery-dots button.active{background:linear-gradient(90deg,#6dd3ff,#8b6dff)}
+  revealEls.forEach(el => {
+    el.classList.add('fade-in');
+    observer.observe(el);
+  });
 
-/* Contact */
-.contact{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:18px;
-  align-items:start;
-  margin-bottom:48px;
-}
-.contact-card{
-  padding:20px;border-radius:14px;border:1px solid var(--glass-border);
-}
-.contact-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:12px}
-.contact-grid a{color:var(--muted);text-decoration:none}
-.map-preview{border-radius:14px;overflow:hidden;position:relative}
-.map-preview img{width:100%;height:220px;object-fit:cover;display:block}
-.map-overlay{
-  position:absolute;inset:auto 12px 12px 12px;padding:10px;border-radius:12px;
-  display:inline-block;background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-  border:1px solid var(--glass-border);
-  backdrop-filter: blur(8px);
-}
+  // Parallax for elements with data-speed
+  const parallaxEls = document.querySelectorAll('.parallax');
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY;
+    parallaxEls.forEach(el => {
+      const speed = parseFloat(el.getAttribute('data-speed') || 0.2);
+      el.style.transform = `translateY(${scrolled * speed}px)`;
+    });
+  }, {passive:true});
 
-/* Footer */
-.site-footer{padding:18px 0;text-align:center;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02)}
+  // Remove loading class for entrance animation
+  setTimeout(() => document.body.classList.remove('loading'), 300);
 
-/* Responsive */
-@media(min-width:880px){
-  .hero-inner{grid-template-columns:1fr}
-  .split{grid-template-columns:1fr 1fr;gap:28px}
-  .gallery-slider .slide{min-width:48%;max-width:48%}
-  .contact{grid-template-columns:1fr 360px}
-  .contact-grid{grid-template-columns:1fr}
-}
+  // Accessibility: keyboard gallery navigation
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') goTo(index + 1);
+    if (e.key === 'ArrowLeft') goTo(index - 1);
+  });
 
-/* Animations & reveal */
-.fade-in{opacity:0;transform:translateY(10px);transition:opacity .7s ease, transform .7s ease}
-.fade-in.show{opacity:1;transform:none}
+  // Performance: lazy-load gallery images
+  const imgs = document.querySelectorAll('.gallery img, .split-media img, .hero-img, .map-preview img');
+  imgs.forEach(img => {
+    img.loading = 'lazy';
+  });
+
+});
