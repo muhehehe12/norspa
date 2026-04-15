@@ -1,41 +1,148 @@
-<!DOCTYPE html>
-<html lang="ro">
+<!doctype html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Locație Premium</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Premium Location — Luxury Presentation</title>
 
-    <!-- Font elegant -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Inter font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Premium, Apple-inspired presentation for a Google Maps location. Tap the CTA to open the Google Maps location.">
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="loading">
 
-    <div class="container">
-        <div class="card">
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-inner container">
+      <div class="hero-media" aria-hidden="true">
+        <img src="https://images.unsplash.com/photo-1505691723518-36a2b6b6b2d6?q=80&w=1600&auto=format&fit=crop" alt="Main view" class="hero-img" />
+        <div class="hero-overlay"></div>
+      </div>
 
-            <!-- Imagine -->
-            <div class="image-section">
-                <img src="https://source.unsplash.com/800x600/?restaurant,luxury" alt="Locatie">
-            </div>
+      <div class="hero-card glass">
+        <h1 class="place-title">[PLACE NAME]</h1>
+        <p class="place-sub">[Short description or tagline — replace with actual description]</p>
 
-            <!-- Text -->
-            <div class="text-section">
-                <h1>Locația ta</h1>
-                <p>
-                    Descoperă o experiență elegantă, modernă și rafinată. 
-                    Design inspirat de stilul Apple, cu accent pe minimalism și fluiditate.
-                </p>
-
-                <a href="https://maps.app.goo.gl/ocfqPsAp1ABtetB26" target="_blank" class="btn">
-                    Vezi pe Google Maps
-                </a>
-            </div>
-
+        <div class="quick-info">
+          <div class="info-item">
+            <strong>Address</strong>
+            <span id="address">[Address not available]</span>
+          </div>
+          <div class="info-item">
+            <strong>Phone</strong>
+            <a id="phone" href="tel:+0000000000">[+00 000 000 000]</a>
+          </div>
+          <div class="info-item">
+            <strong>Hours</strong>
+            <span id="hours">[Opening hours not available]</span>
+          </div>
         </div>
-    </div>
 
-    <script src="script.js"></script>
+        <div class="hero-actions">
+          <a id="cta-map" class="btn primary" href="https://maps.app.goo.gl/ocfqPsAp1ABtetB26" target="_blank" rel="noopener noreferrer" aria-label="Open in Google Maps">Open in Google Maps</a>
+          <a class="btn ghost" id="call-cta" href="tel:+0000000000">Call</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Split section -->
+    <section class="split container">
+      <div class="split-media parallax" data-speed="0.3">
+        <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1200&auto=format&fit=crop" alt="Interior view" />
+      </div>
+
+      <div class="split-text glass">
+        <h2>About this place</h2>
+        <p class="muted">This premium presentation is styled to feel like a high-end product page: minimal, elegant, and focused on clarity. Replace the placeholder text and images with the actual details from the Google Maps listing to complete the page.</p>
+
+        <ul class="features">
+          <li><strong>Design</strong> — Apple-inspired, minimal, glassmorphism.</li>
+          <li><strong>UX</strong> — Smooth animations, responsive, mobile-first.</li>
+          <li><strong>Functionality</strong> — Tap-to-call, open Google Maps, image gallery.</li>
+        </ul>
+
+        <div class="split-actions">
+          <a class="btn primary" href="https://maps.app.goo.gl/ocfqPsAp1ABtetB26" target="_blank" rel="noopener noreferrer">View on Google Maps</a>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Photo gallery -->
+    <section class="gallery container">
+      <h3>Photo Gallery</h3>
+      <div class="gallery-wrap">
+        <button class="gallery-nav prev" aria-label="Previous image">‹</button>
+        <div class="gallery-slider" id="gallery">
+          <figure class="slide active">
+            <img src="https://images.unsplash.com/photo-1505691723518-36a2b6b6b2d6?q=80&w=1400&auto=format&fit=crop" alt="Gallery image 1">
+            <figcaption>Gallery image 1</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?q=80&w=1400&auto=format&fit=crop" alt="Gallery image 2">
+            <figcaption>Gallery image 2</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1400&auto=format&fit=crop" alt="Gallery image 3">
+            <figcaption>Gallery image 3</figcaption>
+          </figure>
+          <figure class="slide">
+            <img src="https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=1400&auto=format&fit=crop" alt="Gallery image 4">
+            <figcaption>Gallery image 4</figcaption>
+          </figure>
+        </div>
+        <button class="gallery-nav next" aria-label="Next image">›</button>
+      </div>
+
+      <div class="gallery-dots" id="dots"></div>
+    </section>
+
+    <hr class="divider" />
+
+    <!-- Contact -->
+    <section class="contact container">
+      <div class="contact-card glass">
+        <h3>Contact</h3>
+        <p class="muted">Tap to call or open the location in Google Maps.</p>
+
+        <div class="contact-grid">
+          <div>
+            <strong>Phone</strong>
+            <a id="contact-phone" href="tel:+0000000000">[+00 000 000 000]</a>
+          </div>
+          <div>
+            <strong>Address</strong>
+            <address id="contact-address">[Address not available]</address>
+          </div>
+          <div>
+            <strong>Open in Maps</strong>
+            <a class="btn primary" href="https://maps.app.goo.gl/ocfqPsAp1ABtetB26" target="_blank" rel="noopener noreferrer">Open Google Maps</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-preview">
+        <a href="https://maps.app.goo.gl/ocfqPsAp1ABtetB26" target="_blank" rel="noopener noreferrer" aria-label="Open map">
+          <img src="https://images.unsplash.com/photo-1503264116251-35a269479413?q=80&w=1200&auto=format&fit=crop" alt="Map preview">
+          <div class="map-overlay glass">
+            <span>Open in Google Maps</span>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <small>© <span id="year"></span> Premium Location Presentation</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
-</html>
+    </html>
